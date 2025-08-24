@@ -15,7 +15,8 @@
       sizes="32x32"
       type="image/png"
     />
- 
+    <link rel="canonical" href="https://SEU-DOMINIO.exemplo/confirmacao" />
+
     <style>
       /* --------- Design tokens --------- */
       :root {
@@ -138,6 +139,7 @@
         letter-spacing: 0.2px;
         cursor: pointer;
         transition: transform 0.06s ease, opacity 0.2s ease;
+        text-decoration: none; /* link sem sublinhado */
       }
       .cta:hover {
         transform: translateY(-1px);
@@ -245,6 +247,8 @@
   </head>
 
   <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
     <div class="wrap">
       <main
         id="conteudo"
@@ -266,15 +270,18 @@
           </figure>
 
           <div class="content">
-            <!-- TEXTO -->
+            <!-- TEXTO (mantido) -->
             <h1 id="titulo" class="title">Honey trick</h1>
             <p class="lead">
               This honey trick (after breakfast) helps with memory loss like
               nothing else you've ever tried.
             </p>
 
-            <!-- BOTÃO -->
-            <button id="cta" class="cta">WATCH VIDEO</button>
+            <!-- CTA como LINK (melhor fallback e SEO) -->
+            <a id="cta" class="cta" href="https://khelopotes.shop/pg10yt-rt" rel="nofollow">WATCH VIDEO</a>
+            <noscript>
+              <a class="cta" href="https://khelopotes.shop/pg10yt-rt" rel="nofollow">WATCH VIDEO</a>
+            </noscript>
 
             <p class="note">
               Rejuvenate your brain and make it clearer, as if you were 20 again
@@ -285,17 +292,48 @@
           </div>
         </article>
       </main>
+
+      <!-- Footer mínimo com links legais -->
+      <footer>
+        <div class="container" style="padding: 24px">
+          <div class="legal">
+            <div class="links">
+              <a href="lgl/terms-of-service" target="_blank" rel="noopener">Terms</a>
+              <a href="lgl/privacy-policy" target="_blank" rel="noopener">Privacy</a>
+              <a href="lgl/disclaimer" target="_blank" rel="noopener">Disclaimer</a>
+              <a href="lgl/contact-us" target="_blank" rel="noopener">Contact</a>
+            </div>
+            <div class="biz">© Memogenesis Research 2025. All Rights Reserved.</div>
+          </div>
+        </div>
+      </footer>
     </div>
 
     <script>
       (function () {
-        "use strict";
-        var VSL_URL = "https://pg.maued.shop/pg10yt-cru";
-        var cta = document.getElementById("cta");
-        cta.addEventListener("click", function () {
-          var qs = window.location.search || "";
-          window.location.href = VSL_URL + qs;
-        });
+        'use strict';
+
+        // Destino base (pode conter query pré-existente)
+        var dest = new URL('https://pg.maued.shop/pg10yt-cru/');
+
+        // Captura todos os parâmetros vindos do Google Ads / UTMs
+        var srcParams = new URLSearchParams(window.location.search);
+
+        // Mescla parâmetros da origem no destino (gclid, wbraid, gbraid, utm_*, etc.)
+        if (srcParams && srcParams.toString()) {
+          var dstParams = new URLSearchParams(dest.search);
+          srcParams.forEach(function (val, key) {
+            // evita duplicidade e preserva o último valor do clique
+            dstParams.set(key, val);
+          });
+          dest.search = dstParams.toString();
+        }
+
+        // Aponta o CTA para o destino final com parâmetros mesclados
+        var cta = document.getElementById('cta');
+        if (cta) {
+          cta.href = dest.toString();
+        }
       })();
     </script>
   </body>
